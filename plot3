@@ -1,0 +1,15 @@
+household_power_consumption <- read.csv("~/Documents/RWork/household_power_consumption.txt", sep=";", header = TRUE, stringsAsFactors = FALSE)
+household_power_consumption$Time2<-paste(household_power_consumption$Date, household_power_consumption$Time)
+household_power_consumption$Date <- as.Date(household_power_consumption$Date, format = "%d/%m/%Y")
+
+dat1 <- subset(household_power_consumption, Date == "2007-02-01")
+dat2 <- subset(household_power_consumption, Date == "2007-02-02")
+dat <- rbind(dat1, dat2)
+dat$Time2 <- strptime(dat$Time2, "%d/%m/%Y %H:%M:%S") 
+
+png(filename = "plot3.png", width = 480, height = 480, units = "px")
+plot(dat$Time2, dat$Sub_metering_1, type = "l", xlab = "", ylab = "Energy sub metering")
+with(dat, lines(dat$Time2, dat$Sub_metering_2, col="red"))
+with(dat, lines(dat$Time2, dat$Sub_metering_3, col="blue"))
+legend("topright", lty = 1, col=c("black", "red", "blue"), c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+dev.off()
